@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/domain/di/di.dart';
 import 'package:movie_app/ui/screens/main/main_view_model.dart';
-import 'package:movie_app/ui/screens/main/tabs/browes/browse_screen.dart';
-import 'package:movie_app/ui/screens/main/tabs/home/home_screen.dart';
-import 'package:movie_app/ui/screens/main/tabs/search/search_screen.dart';
 import 'package:movie_app/ui/utils/app_colors.dart';
 
 class mainScreen extends StatelessWidget {

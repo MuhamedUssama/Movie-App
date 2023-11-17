@@ -12,9 +12,7 @@ import 'package:movie_app/ui/utils/error_view.dart';
 import 'package:movie_app/ui/widgets/loading_widget.dart';
 
 class SearchScreen extends StatefulWidget {
-
-
-   SearchScreen({super.key});
+  SearchScreen({super.key});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -29,71 +27,106 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height *.03,
+            height: MediaQuery.of(context).size.height * .03,
           ),
           TextFormField(
             controller: viewModel.controller,
-            onChanged: (text){
-             viewModel.changeOfController = text ;
-             print("text is : $text");
+            onChanged: (text) {
+              viewModel.changeOfController = text;
+              print("text is : $text");
             },
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
-                borderSide: BorderSide(color: AppColors.grey,width: 2),
+                borderSide: BorderSide(color: AppColors.grey, width: 2),
               ),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide(color: AppColors.grey,width: 2)
+                  borderSide: BorderSide(color: AppColors.grey, width: 2)),
+              prefixIcon: const Icon(
+                Icons.search_rounded,
+                color: Colors.white70,
               ),
-              prefixIcon:const Icon(Icons.search_rounded,color:Colors.white70,),
               filled: true,
-              fillColor:AppColors.blackGrey,
+              fillColor: AppColors.blackGrey,
               hintText: "Search",
-              hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.grey),
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(color: AppColors.grey),
               border: InputBorder.none,
             ),
             cursorColor: AppColors.grey,
             cursorHeight: 20,
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white70 , fontSize: 18),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(color: Colors.white70, fontSize: 18),
           ),
           BlocBuilder(
             bloc: viewModel.useCase,
-              builder: (context, state) {
-                if(state is BaseRequestSuccessState){
-                  return buildListView(state.data);
-                }else if(state is BaseRequestErrorState){
-                  return Expanded(
-                    child: Center(
-                      child: Text(
-                        "write anything to search...",
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: AppColors.accent,
+            builder: (context, state) {
+              if (state is BaseRequestSuccessState) {
+                return buildListView(state.data);
+              } else if (state is BaseRequestErrorState) {
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(AppAssets.searshNotFound),
+                        const SizedBox(height: 10),
+                        Text(
+                          "No movies found",
+                          style:
+                              Theme.of(context).textTheme.labelLarge!.copyWith(
+                                    color: AppColors.grey,
+                                  ),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                }else if(state is BaseRequestInitialState ){
-                  return  Expanded(
-                    child: Center(
-                      child: Text(
-                        "write anything to search...",
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: AppColors.accent,
+                  ),
+                );
+              } else if (state is BaseRequestInitialState) {
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(AppAssets.searshNotFound),
+                        const SizedBox(height: 10),
+                        Text(
+                          "No movies found",
+                          style:
+                              Theme.of(context).textTheme.labelLarge!.copyWith(
+                                    color: AppColors.grey,
+                                  ),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                }else{
-                  return  Expanded(
-                    child: Center(
-                      child: Text(
-                        "write anything to search...",
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(color: AppColors.accent,
+                  ),
+                );
+              } else {
+                return Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(AppAssets.searshNotFound),
+                        const SizedBox(height: 10),
+                        Text(
+                          "No movies found",
+                          style:
+                              Theme.of(context).textTheme.labelLarge!.copyWith(
+                                    color: AppColors.grey,
+                                  ),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                }
-              },
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -101,79 +134,94 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget buildListView(List<SearchResult>? move) => Expanded(
-    child: ListView.separated(
-        itemBuilder: (context, index) =>SizedBox(
-          width: MediaQuery.of(context).size.width * .8,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder:(context) => FilmDetailsScreen("${move[index].id}") )
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      imageUrl: move[index].backdropPath ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png",
-                      errorWidget: (_, __, ___) => Image.asset(
-                        AppAssets.imageTest,
-                        height: MediaQuery.of(context).size.height * .1,
-                        width: MediaQuery.of(context).size.width * .4,
-                        fit: BoxFit.cover,
+        child: ListView.separated(
+            itemBuilder: (context, index) => SizedBox(
+                  width: MediaQuery.of(context).size.width * .8,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FilmDetailsScreen("${move[index].id}")));
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: CachedNetworkImage(
+                              imageUrl: move[index].backdropPath ??
+                                  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png",
+                              errorWidget: (_, __, ___) => Image.asset(
+                                AppAssets.imageTest,
+                                height: MediaQuery.of(context).size.height * .1,
+                                width: MediaQuery.of(context).size.width * .4,
+                                fit: BoxFit.cover,
+                              ),
+                              progressIndicatorBuilder: (_, __, progress) =>
+                                  Center(
+                                      child: CircularProgressIndicator(
+                                value: progress.progress,
+                                color: AppColors.accent,
+                              )),
+                              height: MediaQuery.of(context).size.height * .1,
+                              width: MediaQuery.of(context).size.width * .4,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  move[index].originalTitle!,
+                                  style: const TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 15,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  move[index].releaseDate!,
+                                  style: const TextStyle(
+                                    color: AppColors.grey,
+                                    fontSize: 13,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  move[index].overview!,
+                                  style: const TextStyle(
+                                    color: AppColors.grey,
+                                    fontSize: 13,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      progressIndicatorBuilder: (_, __, progress) => Center(
-                          child: CircularProgressIndicator(value: progress.progress,)),
-                      height: MediaQuery.of(context).size.height * .1,
-                      width: MediaQuery.of(context).size.width * .4,
-                      fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(width: 12,),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          move[index].originalTitle! ,
-                          style: TextStyle(
-                            color: AppColors.white ,
-                            fontSize: 15,
-                          ),
-                          maxLines: 1,
-                        ),
-                        SizedBox(height: 4,),
-                        Text(
-                          move[index].releaseDate! ,
-                          style: TextStyle(
-                            color: AppColors.grey ,
-                            fontSize: 13,
-                          ),
-                          maxLines: 1,
-                        ),
-                        SizedBox(height: 4,),
-                        Text(
-                          move[index].overview! ,
-                          style: TextStyle(
-                            color: AppColors.grey ,
-                            fontSize: 13,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        separatorBuilder: (context, index) => Container(height: 1,width:MediaQuery.of(context).size.width * .8, color: AppColors.grey,),
-        itemCount: move!.length
-    ),
-  );
+                ),
+            separatorBuilder: (context, index) => Container(
+                  height: 1,
+                  width: MediaQuery.of(context).size.width * .8,
+                  color: AppColors.grey,
+                ),
+            itemCount: move!.length),
+      );
 }
