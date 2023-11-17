@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/ui/screens/main/main_screen.dart';
+import 'package:movie_app/ui/screens/splash/splash.dart';
 import 'package:movie_app/ui/utils/app_theme.dart';
 import 'domain/di/di.dart';
 
@@ -18,10 +19,11 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.light,
       routes: {
-        mainScreen.roteName : (context) => mainScreen(),
+        mainScreen.roteName: (context) => mainScreen(),
+        SplashScreen.routeName: (context) => const SplashScreen(),
       },
-      initialRoute: mainScreen.roteName,
+      initialRoute: SplashScreen.routeName,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
-
